@@ -1,7 +1,10 @@
-defmodule EpsonConnectexWeb.PageController do
-  use EpsonConnectexWeb, :controller
+defmodule BasicWeb.PageController do
+	use BasicWeb, :controller
 
-  def index(conn, _params) do
-    render(conn, "index.html")
-  end
+	def index( conn, params ) do
+		path_ = params[ "path_" ]
+		content_path = if path_ == [], do: "index.html", else: Path.join( path_ )
+		render( conn, content_path, params: params )
+	end
+
 end
