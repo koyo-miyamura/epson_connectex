@@ -1,5 +1,5 @@
-defmodule BasicWeb.PageController do
-	use BasicWeb, :controller
+defmodule EpsonConnectexWeb.PageController do
+	use EpsonConnectexWeb, :controller
 
 	def index( conn, params ) do
 		path_ = params[ "path_" ]

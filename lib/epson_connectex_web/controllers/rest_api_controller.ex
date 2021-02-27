@@ -1,5 +1,5 @@
-defmodule BasicWeb.RestApiController do
-  use BasicWeb, :controller
+defmodule EpsonConnectexWeb.RestApiController do
+  use EpsonConnectexWeb, :controller
 
   def index( conn, params ) do
     { no_id_path, id } = Rest.separate_id( params[ "path_" ] )
@@ -106,7 +106,7 @@ defmodule BasicWeb.RestApiController do
     IO.inspect params
     IO.puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
-    File.read!( "lib/basic_web/templates/api/rest/#{ path }.eex" )
+    File.read!( "lib/epson_connectex_web/templates/api/rest/#{ path }.eex" )
     |> Code.eval_string( params: params, data: params[ "data" ] )
     |> elem( 0 )
   end

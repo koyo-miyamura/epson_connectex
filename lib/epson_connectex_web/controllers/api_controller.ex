@@ -1,5 +1,5 @@
-defmodule BasicWeb.ApiController do
-	use BasicWeb, :controller
+defmodule EpsonConnectexWeb.ApiController do
+	use EpsonConnectexWeb, :controller
 
 	def index( conn, params ) do
 		path_ = params[ "path_" ]
@@ -26,7 +26,7 @@ defmodule BasicWeb.ApiController do
 		IO.inspect params
 		IO.puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
-		File.read!( "lib/basic_web/templates/api/#{ path }.eex" )
+		File.read!( "lib/epson_connectex_web/templates/api/#{ path }.eex" )
 		|> Code.eval_string( params: params, data: params[ "data" ] )
 		|> elem( 0 )
 	end
