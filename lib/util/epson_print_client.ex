@@ -1,4 +1,4 @@
-defmodule Epson.Printer.Client do
+defmodule EpsonPrint.Client do
   @moduledoc """
   EpsonConnect API wrapper
 
@@ -13,7 +13,7 @@ defmodule Epson.Printer.Client do
   Build data for EpsonConnect authorize API
 
   ## Examples
-    iex> Epson.Printer.Client.build_authorize(%{username: "dummy_user", password: "dummy_pw", basic_credentials: "dummy_credencials"})
+    iex> EpsonPrint.Client.build_authorize(%{username: "dummy_user", password: "dummy_pw", basic_credentials: "dummy_credencials"})
     %{"body" => "grant_type=password&password=dummy_pw&username=dummy_user", "header" => ["Content-Type": "application/x-www-form-urlencoded; charset=utf-8", Authorization: "Basic dummy_credencials"], "host" => "https://api.epsonconnect.com", "path" => "/api/1/printing/oauth2/auth/token?subject=printer"}
   """
   def build_authorize( %{ username: username, password: password, basic_credentials: basic_credentials } ) do
@@ -36,8 +36,8 @@ defmodule Epson.Printer.Client do
   Build data for EpsonConnect create job API
 
   ## Examples
-    iex> Epson.Printer.Client.build_create_job(%{"dummy_job_key"=>"dummy_job_value"}, %{ "subject_id" => "dummy_printer_id", "access_token" => "dummy_access_token" })
-
+    iex> EpsonPrint.Client.build_create_job(%{"dummy_job_key" => 123}, %{"subject_id" => 456, "access_token"=> 789})
+    %{"body" => ~s({"dummy_job_key":123}), "header" => ["Content-Type": "application/json; charset=utf-8", Authorization: "Bearer 789"], "host" => "https://api.epsonconnect.com", "path" => "/api/1/printing/printers/456/jobs"}
   """
   def build_create_job( payload, %{ "subject_id" => printer_id, "access_token" => access_token } ) do
     %{
@@ -52,8 +52,8 @@ defmodule Epson.Printer.Client do
   Build data for EpsonConnect upload file API
 
   ## Examples
-    iex> Epson.Printer.Client.build_upload(%{"upload_uri"=>"https://dummy.upload_uri.com/dummy_path"}, "dummy_from_filename", "dummy_to_filename")
-
+    iex> EpsonPrint.Client.build_upload(%{"upload_uri"=>"https://dummy.upload_uri.com/dummy_path"}, "dummy_from_filename", "dummy_to_filename")
+    %{"body" => "dummy_from_filename", "header" => ["Content-Type": "application/octet-stream"], "host" => "https://dummy.upload_uri.com/dummy_path", "path" => "&File=dummy_to_filename"}
   """
   def build_upload( %{ "upload_uri" => upload_uri }, file_body, to_filename ) do
     %{
@@ -70,6 +70,8 @@ defmodule Epson.Printer.Client do
   Build data for EpsonConnect execute print API
 
   ## Examples
+    iex> EpsonPrint.Client.build_print(%{"id" => "dummy_job_id"}, %{"subject_id" => "dummy_printer_id", "access_token" => "dummy_access_token"})
+    %{"body" => "", "header" => ["Content-Type": "application/json; charset=utf-8", Authorization: "Bearer dummy_access_token"], "host" => "https://api.epsonconnect.com", "path" => "/api/1/printing/printers/dummy_printer_id/jobs/dummy_job_id/print"}
   """
   def build_print( %{ "id" => job_id }, %{ "subject_id" => printer_id, "access_token" => access_token } ) do
     %{
@@ -84,6 +86,8 @@ defmodule Epson.Printer.Client do
   Build data for get job result API
 
   ## Examples
+    iex> EpsonPrint.Client.build_get_result(%{"id" => "dummy_job_id"}, %{"subject_id" => "dummy_printer_id", "access_token" => "dummy_access_token"})
+    %{"body" => "", "header" => [Authorization: "Bearer dummy_access_token"], "host" => "https://api.epsonconnect.com", "path" => "/api/1/printing/printers/dummy_printer_id/jobs/dummy_job_id"}
   """
   def build_get_result( %{ "id" => job_id }, %{ "subject_id" => printer_id, "access_token" => access_token } ) do
     %{

@@ -1,5 +1,5 @@
-defmodule Epson.V1.Create do
-  alias Epson.Printer.Client
+defmodule EpsonPrint do
+  alias EpsonPrint.Client
 
   @username "" # Config your own one
   @password "" # Config your own one
@@ -19,8 +19,8 @@ defmodule Epson.V1.Create do
 
   defp payload do
     %{
-      "job_name"   => "test-job",
-      "print_mode" => "photo",
+      "job_name"      => "test-job",
+      "print_mode"    => "photo",
       "print_setting" => %{
         "media_size"    => "ms_l",
         "media_type"    => "mt_photopaper",
@@ -77,7 +77,7 @@ IO.puts "[params]"
 IO.inspect params[ "data" ]
 IO.puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
-result = Epson.V1.Create.create( params )
+result = EpsonPrint.create( params )
 
 IO.puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 IO.puts "[result]"
