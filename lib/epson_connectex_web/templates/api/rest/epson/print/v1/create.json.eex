@@ -1,4 +1,5 @@
 defmodule EpsonPrint do
+  alias EpsonConnect
   alias EpsonConnect.Print
 
   @username "" # Config your own one
@@ -42,7 +43,7 @@ defmodule EpsonPrint do
         password:          @password,
         basic_credentials: @basic_credentials
       }
-      |> Print.build_authorize
+      |> EpsonConnect.build_authorize
     Json.post( data[ "host" ], data[ "path" ], data[ "body" ] |> String.replace( "%40", "@" ), data[ "header" ] )
   end
 

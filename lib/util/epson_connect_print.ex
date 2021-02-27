@@ -1,36 +1,14 @@
 defmodule EpsonConnect.Print do
   @moduledoc """
-  EpsonConnect API wrapper
+  EpsonConnect printer API wrapper
 
   For details, refer to the API document below:
   https://developer.cp.epson.com/ecapi/downloads/?lang=ja
   """
 
-  @host "https://api.epsonconnect.com"
-  @root "/api/1/printing"
+  import EpsonConnect
 
-  @doc """
-  Build data for EpsonConnect authorize API
-
-  ## Examples
-    iex> EpsonConnect.Print.build_authorize(%{username: "dummy_user", password: "dummy_pw", basic_credentials: "dummy_credencials"})
-    %{"body" => "grant_type=password&password=dummy_pw&username=dummy_user", "header" => ["Content-Type": "application/x-www-form-urlencoded; charset=utf-8", Authorization: "Basic dummy_credencials"], "host" => "https://api.epsonconnect.com", "path" => "/api/1/printing/oauth2/auth/token?subject=printer"}
-  """
-  def build_authorize( %{ username: username, password: password, basic_credentials: basic_credentials } ) do
-    %{
-      "host"   => @host,
-      "path"   => Path.join( @root, "/oauth2/auth/token?subject=printer" ),
-      "body"   => %{
-        "grant_type" => "password",
-        "username"   => username,
-        "password"   => password,
-      } |> URI.encode_query,
-      "header" => [
-        "Content-Type":  "application/x-www-form-urlencoded; charset=utf-8",
-        "Authorization": "Basic #{basic_credentials}"
-      ],
-    }
-  end
+  def target(), do: "printers"
 
   @doc """
   Build data for EpsonConnect create job API
@@ -41,8 +19,8 @@ defmodule EpsonConnect.Print do
   """
   def build_create_job( payload, %{ "subject_id" => printer_id, "access_token" => access_token } ) do
     %{
-      "host"   => @host,
-      "path"   => Path.join( @root, "/printers/#{ printer_id }/jobs" ),
+      "host"   => EpsonConnect.host(),
+      "path"   => Path.join( [ EpsonConnect.root(), target(), "/#{ printer_id }/jobs" ] ),
       "body"   => payload |> Jason.encode!,
       "header" => header_json() |> Keyword.merge( header_oauth2( access_token ) ),
     }
@@ -75,8 +53,8 @@ defmodule EpsonConnect.Print do
   """
   def build_print( %{ "id" => job_id }, %{ "subject_id" => printer_id, "access_token" => access_token } ) do
     %{
-      "host"   => @host,
-      "path"   => Path.join( @root, "/printers/#{ printer_id }/jobs/#{ job_id }/print" ),
+      "host"   => EpsonConnect.host(),
+      "path"   => Path.join( [ EpsonConnect.root(), target(), "/#{ printer_id }/jobs/#{ job_id }/print" ] ),
       "body"   => "",
       "header" => Keyword.merge( header_json(), header_oauth2( access_token ) ),
     }
@@ -91,8 +69,8 @@ defmodule EpsonConnect.Print do
   """
   def build_get_result( %{ "id" => job_id }, %{ "subject_id" => printer_id, "access_token" => access_token } ) do
     %{
-      "host"   => @host,
-      "path"   => Path.join( @root, "/printers/#{ printer_id }/jobs/#{ job_id }" ),
+      "host"   => EpsonConnect.host(),
+      "path"   => Path.join( [ EpsonConnect.root(), target(), "/#{ printer_id }/jobs/#{ job_id }" ] ),
       "body"   => "",
       "header" => header_oauth2( access_token ),
     }
