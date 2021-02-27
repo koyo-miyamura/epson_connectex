@@ -1,5 +1,5 @@
 defmodule EpsonPrint do
-  alias EpsonPrint.Client
+  alias EpsonConnect.Print
 
   @username "" # Config your own one
   @password "" # Config your own one
@@ -42,31 +42,31 @@ defmodule EpsonPrint do
         password:          @password,
         basic_credentials: @basic_credentials
       }
-      |> Client.build_authorize
+      |> Print.build_authorize
     Json.post( data[ "host" ], data[ "path" ], data[ "body" ] |> String.replace( "%40", "@" ), data[ "header" ] )
   end
 
   def create_job( job, tokens ) do
-    data = Client.build_create_job( job, tokens )
+    data = Print.build_create_job( job, tokens )
     Json.post( data[ "host" ], data[ "path" ], data[ "body" ], data[ "header" ] )
   end
 
   def read_from_filepath_last( filepath ), do: Path.join( @image_root, filepath |> String.split( "/" ) |> List.last ) |> File.read!
 
   def upload( job, from_filename, to_filename ) do
-    data = Client.build_upload( job, from_filename, to_filename )
+    data = Print.build_upload( job, from_filename, to_filename )
     Json.post_raw_response( data[ "host" ], data[ "path" ], data[ "body" ], data[ "header" ] )
     job
   end
 
   def print( job, tokens ) do
-    data = Client.build_print( job, tokens )
+    data = Print.build_print( job, tokens )
     Json.post( data[ "host" ], data[ "path" ], data[ "body" ], data[ "header" ] )
     job
   end
 
   def get_result( job, tokens ) do
-    data = Client.build_get_result( job, tokens )
+    data = Print.build_get_result( job, tokens )
     Json.get( data[ "host" ], data[ "path" ], data[ "header" ] )
   end
 
