@@ -42,7 +42,7 @@ defmodule EpsonConnectex.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:smallex, "~> 0.0"},
+      {:smallex, git: "https://github.com/piacerex/smallex.git", branch: "v1.0"}
     ]
   end
 
